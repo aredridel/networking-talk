@@ -1,0 +1,16 @@
+{
+  "name": "networking-talk",
+  "version": "1.0.0",
+  "description": "A Talk about Networking",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aredridel/networking-talk.git"
+  },
+  "author": "Aria Stewart <aredridel@dinhe.net>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aredridel/networking-talk/issues"
+  },
+  "homepage": "https://github.com/aredridel/networking-talk#readme"
+}
