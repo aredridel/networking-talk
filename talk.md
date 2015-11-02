@@ -14,7 +14,7 @@ We had 8 modems, 8 phone lines, and a 56 KBPS frame-relay leased line.
 
 ----
 
-<iframe src='http://google.com'></iframe>
+<iframe src='http://127.0.0.1:3333/i/tcpdump/port/80'></iframe>
 
     RS-422
     Token-ring
