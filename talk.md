@@ -62,26 +62,6 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 ----
 
-# Routing
-
-<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
-
-^ Each host looks in its routing table for which interface to put a packet on, drops it into the network, and the next hop picks it up and does the same. It's a very simple process. For the simple case of the host with a router that acts as a gateway, there are two entries: IPs on the local network do an ARP lookup, and send directly, IPs off the local network send to the router.
-
-^ Things get interesting when we get to routers with multiple connections to the Internet. ISP routers sometimes have a couple configured routes -- whoever's cheapest to send traffic through -- but more often they talk to their neighbor routers over those expensive leased lines (or locally over Ethernet if they are in a peering facility together.)
-
-----
-
-# A routing example
-
-<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
-
-^ So your computer has an address like `1.2.3.4` and is trying to talk to my server at `24.75.24.253`, The two IP addresses have different network parts, so your computer sends the packet to its router. Your router sends it to the connected router at the Internet provider. They probably pass it to a couple others inside the ISP, but then it gets to a place where it could say, send it on toward France, or toward Germany, or toward one of the trans-Atlantic cables. The shortest path to that system is transatlantic, so it passes the packet that way. Each decision is a simple lookup table, then passing the packet on. Routing looks at nothing else.
-
-^ One day in 2013, someone in Russia configured their router to say that they had a particularly short path to the rest of the Internet, and it would be most efficient to go that way. It might have been an accident, it might have been a state level attack on the Internet. For about four hours, about 1% of the Internet went through this relatively small Internet connection in Russia. Connections from California to other parts of California would be routed through it. Entire parts of the Internet went down briefly while the bogus route was filtered out. Lots of traffic was dropped because the connection was completely insufficient to pass as much as it received.
-
-------
-
 # IP Addresses
 
 One IP address maps to exactly one physical interface, a port on a computer or router somewhere. It _should_ be a globally unique identifier.
@@ -114,6 +94,94 @@ Host part `0218:51ff:fec8:2476`
 
 ----
 
+# Routing
+
+<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
+
+^ Each host looks in its routing table for which interface to put a packet on, drops it into the network, and the next hop picks it up and does the same. It's a very simple process. For the simple case of the host with a router that acts as a gateway, there are two entries: IPs on the local network do an ARP lookup, and send directly, IPs off the local network send to the router.
+
+^ Things get interesting when we get to routers with multiple connections to the Internet. ISP routers sometimes have a couple configured routes -- whoever's cheapest to send traffic through -- but more often they talk to their neighbor routers over those expensive leased lines (or locally over Ethernet if they are in a peering facility together.)
+
+----
+
+# A routing example
+
+<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
+
+^ So your computer has an address like `1.2.3.4` and is trying to talk to my server at `24.75.24.253`, The two IP addresses have different network parts, so your computer sends the packet to its router. Your router sends it to the connected router at the Internet provider. They probably pass it to a couple others inside the ISP, but then it gets to a place where it could say, send it on toward France, or toward Germany, or toward one of the trans-Atlantic cables. The shortest path to that system is transatlantic, so it passes the packet that way. Each decision is a simple lookup table, then passing the packet on. Routing looks at nothing else.
+
+----
+
+# Routing gone wrong
+
+^ One day in 2013, someone in Russia configured their router to say that they had a particularly short path to the rest of the Internet, and it would be most efficient to go that way. It might have been an accident, it might have been a state level attack on the Internet. For about four hours, about 1% of the Internet went through this relatively small Internet connection in Russia. Connections from California to other parts of California would be routed through it. Entire parts of the Internet went down briefly while the bogus route was filtered out. Lots of traffic was dropped because the connection was completely insufficient to pass as much as it received.
+
+----
+
+# Routing gone wrong
+## A more recent example
+
+On edge-router:
+
+```
+4.69.146.130/30 via fiberlink
+4.69.146.128/26 via other-interior-router
+```
+
+On other-interior-router:
+
+```
+4.69.146.128/30 via edge-router
+```
+
+A packet destined for `4.69.146.132` comes in.
+
+^ Generally routers match from most specific to most general if multiple routes match. In this example, the route ending in `/30` is the most specific -- it has the longest network part. The packet gets sent out the fiber link.
+
+^ When the fiber link vanishes -- someone cuts a cable, trips on the router, reboots the other end -- that most specific route vanishes, the packets match the second. Since other-interior-router has a specific route for 4.69.146.128/30 back to router-with-deadlink, a loop that appears with a link dropping.
+
+----
+
+## What that looks like when it happens
+
+```
+PING ec2-52-10-227-158.us-west-2.compute.amazonaws.com (52.10.227.158) 56(84) bytes of data.
+From ae-2-52.edge3.Berlin1.Level3.net (4.69.146.132) icmp_seq=1 Time to live exceeded
+From ae-2-52.edge3.Berlin1.Level3.net (4.69.146.132) icmp_seq=2 Time to live exceeded
+```
+
+Oh-oh.
+
+^ every IP packet is given a time to live. Every router decrements it when it passes it on. If it reaches zero in tansit, it drops it. sometimes it's even kind enough to send back a Time to live exceeded ICMP packet
+
+----
+
+## Traceroute
+
+```
+traceroute to validatestore-1-west.internal.npmjs.com (52.10.227.158), 30 hops max, 60 byte packets
+ 1  gateway (192.168.0.1)  5.578 ms
+ 2  10.22.0.1 (10.22.0.1)  11.979 ms
+ 3  rt1-przybyszewskiego-vlan503.core.icpnet.pl (62.21.99.162)  12.099 ms
+ 4  rt1-owsiana-vlan503.core.icpnet.pl (62.21.99.161)  16.891 ms
+ 5  e123-21.icpnet.pl (46.238.123.21)  18.925 ms
+ 6  e91-118.icpnet.pl (46.238.91.118)  16.603 ms
+ 7  e91-109.icpnet.pl (46.238.91.109)  21.524 ms
+ 8  212.162.43.49 (212.162.43.49)  26.788 ms
+ ...
+19  ae-34-52.ebr2.Berlin1.Level3.net (4.69.146.153)  23.436 ms
+20  ae-2-52.edge3.Berlin1.Level3.net (4.69.146.132)  20.764 ms
+21  ae-34-52.ebr2.Berlin1.Level3.net (4.69.146.153)  21.025 ms
+22  ae-2-52.edge3.Berlin1.Level3.net (4.69.146.132)  21.003 ms
+23  ae-34-52.ebr2.Berlin1.Level3.net (4.69.146.153)  13.704 ms
+24  ae-2-52.edge3.Berlin1.Level3.net (4.69.146.132)  16.496 ms
+25  ae-34-52.ebr2.Berlin1.Level3.net (4.69.146.153)  17.237 ms
+26  ae-2-52.edge4.Berlin1.Level3.net (4.69.146.133)  13.848 ms
+```
+
+------
+
+
 # Naming
 
 ^ In the beginning of the Internet, connecting a new system to the network was so rare that naming was not an interesting problem. Someone kept a text file table of what host names went to what IP addresses. Since computers were multi-million dollar investments, sending an email or making a phone call to get its host name into the hosts file that got passed around wasn't such a big deal. That file just got copied to `/etc/hosts` on Unix systems regularly.
@@ -144,11 +212,13 @@ Each connection is identified by a source and destination IP address and port:
 
 ^ The source port is chosen randomly almost always in modern systems. The destination port is hard-coded, usually representing which service is being connected to. In this case, port 80 is HTTP.
 
+^ A listening socket hasn't had its connected peer's side filled in yet, so you can think of it as all zeros -- which is why you get "EADDRINUSE" when you try to listen to a port that's already being listened on. That connection identifier is in use.
+
 ----
 
 ## TCP is for sharing.
 
-^ Each connection has some probability of losing packets if a link fills up, so a connection will slow down to accomodate others.
+^ TCP works by reporting back how much buffer space the each system has with each acknowledgement. A sending system can subtract what it has sent but is not acknowledged from that, and know how much it can send without having to wait.
 
 ^ There was a lot of debate during the creation of web browsers over how many connections and how many connections they could make to each site before it was hostile to others on the network, since each connection increased the relative number of chances there were to get through.
 
@@ -188,7 +258,7 @@ There can only be a known number of packets in flight — one packet is easily r
 
 # Convergence
 
-^ IPv6 has finally become somewhat viable. Cellular carriers start carrying voice traffic over IPv6.
+^ IPv6 has finally become somewhat viable. Cellular carriers have started carrying voice traffic over IPv6.
 
 -----
 
