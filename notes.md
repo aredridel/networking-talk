@@ -1,36 +1,18 @@
-uber_hulk off for lunch
-[12:14:35] uber_hulk be back in few in case you arrive
-[12:28:21] Aria I'm back!
-[13:07:17] uber_hulk back
-[13:07:21] uber_hulk there there?
-[13:07:21] Aria Wub
-[13:07:24] Aria I am!
-[13:07:29] uber_hulk you gotta be here here
-[13:07:48] Aria I am here here.
-[13:07:56] uber_hulk hehe
-[13:08:05] Aria Chilling on the couch, thinking about my talks I have to write.
-[13:08:14] uber_hulk oho no thinking
-[13:08:27] uber_hulk thinking about what you gonna teach me?
-[13:08:35] Aria Hehe. That's related too!
 [13:08:50] Aria So you've worked with HTTP as an API before.
 [13:09:00] Aria And you've poked at routers to make them go.
 [13:09:07] Aria What other networking stuff have you done?
 [13:09:22] uber_hulk so I have used request module a lot
 [13:09:30] uber_hulk I know a bit about content type
-[13:09:32] uber_hulk etc
 [13:09:55] uber_hulk but I go stupidly insane when I think about how server sends data?
 [13:10:01] uber_hulk how packets are made
 [13:10:06] uber_hulk how browser gets it
-[13:10:19] uber_hulk well, I will empty my cup and would like to start from zero
 [13:11:13] uber_hulk I am going to be a very big contributor of http module
 [13:11:20] uber_hulk I need to understand how it works in core
-[13:11:40] Aria Hehe. Starting from zero is hard ;)
 [13:11:50] Aria So have you ever run into the OSI model?
 [13:11:55] Aria The 7 layer model?
 [13:12:26] uber_hulk yes, I know about it
 [13:12:32] Aria Alright.
-[13:12:43] Aria Ever run into how the internet follows it only about as far a slayer 4?
-[13:12:49] Aria er.. as layer 4?
+[13:12:43] Aria Ever run into how the internet follows it only about as far as layer 4?
 [13:13:02] uber_hulk yes, ip => tcp => http
 [13:13:17] uber_hulk tcp makes sure to delever package
 [13:13:21] Aria Kinda!
