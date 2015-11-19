@@ -22,11 +22,11 @@ We had 8 modems, 8 phone lines, and a 56 Kbps frame-relay leased line.
 
 # Networking in the Age of Terminals
 
-RS-422 connections to a computer elsewhere in the building.
+RS-422 serial connections to a computer elsewhere in the building.
 
 100, 150, 300 bps modems, transmitting over standard phone lines.
 
-^ If you wanted data to move between sites faster than that, you purchased access to raw copper from the phone company, a complete circuit. Or you bought tape and put it in some guys trunk and drove it across the city.
+^ If you wanted data to move between sites faster than that, you purchased access to raw copper from the phone company, a complete circuit. Or you bought tape and put it in a hatchback and drove it across the city.
 
 ^ Telephone systems were built to carry human voice. The audio for the human voice to be intelligible is actually a pretty narrow band, about 400-4000 hz. That's three and a half octaves on a piano. Phones commonly filtered frequencies outside that band, and the phone companies could limit those bands too to improve a signal over distance.
 
@@ -40,7 +40,7 @@ RS-422 connections to a computer elsewhere in the building.
 
 ^ Carriers realized they could transmit data about 2 Mbps, if they used two pairs of wires and differential signalling. Suddenly a trunk of 32 phone lines between cities can be run on just 4 wires. Existing trunks got replaced with digital switching, controlled at either end by special tones.
 
-^ You've probably heard of the Captain Crunch Weenie Whistle? Early digital switches would listen for tones from the operator to control channels and route a call onward. Well, since the signalling was in-band, someone could blow a whistle with a 2600 hz tone and get the switch to change into trunk control mode.
+^ You've probably heard of the Captain Crunch Weenie Whistle? Early digital switches would listen for tones from the operator to control channels and route a call onward. Well, since the signalling was in-band, someone could blow a whistle with a 2600 hz tone and get the switch to change into trunk control mode. The golden age of phone phreaking was born.
 
 ----
 
@@ -50,13 +50,7 @@ RS-422 connections to a computer elsewhere in the building.
 
 ^ Claude Shannon's research on this was in the late 40s. How much bandwidth do you need to carry voice? To accurately reproduce sound, you need about double the sampling rate of the pitches you want to reproduce -- this is why we use 44.1 and 48 Khz sample rates for digital audio when the human ear can perceive up to about 22 Khz. Phone systems are trying for efficiency, so they use lower sampling rates good enough for voice but that mangle music.
 
-----
-
-# A standard unit of data transmission
-
-One digital voice channel, 64 Kbps.
-
-^ In Europe the ITU came out with the specifications for the E1 line, a trunk, and the E2, a bundle of trunks, and E3, a bundle of bundles. In the US we have a similar standard.
+^ In Europe the ITU came out with the specifications for the E1 line, a trunk, and the E2, E3, E4 -- multiplexed E1 channels at increasingly high bit rates. The US has a similar set of standards.
 
 ^ For thirty-five years, connections are billed by how many channels they are allocated.
 
@@ -80,17 +74,7 @@ Unix-to-Unix Copy Protocol.
 
 -----
 
-# Local Networks Appear
-
-Minicomputers get more prevalent.
-
-Connections between them appear over the serial lines that were used for terminals.
-
-Sharing coaxial cables makes for workable higher speed campus-wide networks.
-
------
-
-## For the first time, the network is always on
+## Then For the first time, the network is always on
 
 ### Leased lines between sites become the norm
 
@@ -140,7 +124,7 @@ It was installed as `/etc/hosts`
 
 # Through the 80s...
 
-^ X.25 networks dominated. Systems like Compuserve came online on top of X.25 circuits, each segment of the network you would 'dial into' virtually.
+^ X.25 networks dominated. Systems like Compuserve came online on top of X.25 circuits, each segment of the network you would 'dial into' virtually. The Internet grew, quietly. X.25 networks had gateways into the Internet in places.
 
 -----
 
@@ -162,11 +146,11 @@ A distributed, eventually consistent key-value database with delegated namespace
 
 # DNS
 
+^ You need the IP for a hostname. Your computer asks its configured resolver, the resolver asks the roots, who return the top level domain servers, who the resolver queries for the next record, who gets a referral down until a server either has the answer or definitively does not. Each step is cacheable with a time to live, so it forms a global eventually consistent database. DNS can carry other information, too. MIT had a system called Hesiod as part of Project Athena that used DNS protocol for human and account information directory lookups, before LDAP was invented.
+
+^ The delegation model for DNS is pretty clever and actually matches up with how organizations are structured.
+
 -----
-
-## More computers connected are to the Internet every day.
-
-----
 
 # Routing
 
@@ -196,13 +180,15 @@ They keep a complete view of what systems are connected to the internet, as grou
 
 -----
 
-FIXME `<iframe of traceroute with AS numbers>`
+<iframe src='http://127.0.0.1:3333/i/traceroute/8.8.8.8'></iframe>
+
+^ Each packet is routed separately.
 
 ------
 
 ## The core operates on a lot of trust
 
-^ One day in 2012, someone in Russia configured their router to say that they had a particularly short path to the rest of the Internet, and it would be most efficient to go that way. It might have been an accident, it might have been a state level attack on the Internet. For about four hours, about 1% of the Internet went through this relatively small Internet connection in Russia. Connections from California to other parts of California would be routed through it. Entire parts of the Internet went down briefly while the bogus route was filtered out. Lots of traffic was dropped because the connection was completely insufficient to pass as much as it received.
+^ One day in 2013, someone in Russia configured their router to say that they had a particularly short path to the rest of the Internet, and it would be most efficient to go that way. It might have been an accident, it might have been a state level attack on the Internet. For about four hours, about 1% of the Internet went through this relatively small Internet connection in Russia. Connections from California to other parts of California would be routed through it. Entire parts of the Internet went down briefly while the bogus route was filtered out. Lots of traffic was dropped because the connection was completely insufficient to pass as much as it received.
 
 ----
 
@@ -218,13 +204,17 @@ There can only be a known number of packets in flight — one packet is easily r
 
 ^ TCP follows a whole formula to control how fast it sends data, called the 'bandwidth delay product estimate'. Based on how long it takes to get an ACK of data in transit and whether packets get dropped or not.
 
+^ Dropped packets are actually rare on backbones now. Buffers are large enough that there are delayes instead -- which feed into the TCP rate control formula too.
+
 -----
 
-## TCP is reasonably good at sharing.
+## TCP is for sharing.
 
 ^ Each connection has some probability of losing packets if a link fills up, so a connection will slow down to accomodate others.
 
 ^ There was a lot of debate during the creation of web browsers over how many connections and how many connections they could make to each site before it was hostile to others on the network, since each connection increased the relative number of chances there were to get through.
+
+^ Now we don't have to worry about that because we can't ramp our speed up fast enough much of the time. Still wortk considering on narrow links though.
 
 ----
 
@@ -244,15 +234,7 @@ There can only be a known number of packets in flight — one packet is easily r
 
 -----
 
-## Leased lines start using ATM
-
-^ Phone service and data service start converging. ATM is an evolution of that connection-oriented model, giving a virtual circuit, sometimes with guaranteed bandwidth allocations to different tasks. Your phone company could get you a video conferencing channel from office to office, if you used all the right equipment. Vendor and network lock-in looked poised to capture the market.
-
-^ DSL tends to use ATM as well, and a telephone company dominant network model could reach end users.
-
------
-
-# 802.11b is specified
+# WiFi
 
 Wireless completely changes how we use computers and devices in our homes, and wrest control from the phone companies, back toward ISPs and consumers.
 
@@ -297,3 +279,11 @@ Wireless completely changes how we use computers and devices in our homes, and w
 # Excitement
 
 ^ WebRTC covertly added peer to peer features to browsers in the guise of media channels for video and voice. There are some really interesting things happening in that space, with node. @mafintosh and @dominictarr and @pfrazee are all doing some really interesting things.
+
+-----
+
+# Old mistakes
+
+^ We see a lot of system design that mirrors some of the early debates of circuit-switched vs packet-switched networks. The way that websockets fail in the face of intermittent connectivity is very similar to how circuit-switched networks fail when network equipment reboots. HTTP is message oriented, WebSockets are connetion oriented. Statelessness gives resilience, at the expense of control.
+
+^ A great truth here is that all network connections are transient. Some more reliable than others, but it is a matter of when, not if they change, fail or overload.
