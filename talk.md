@@ -9,6 +9,8 @@ My first real job was doing tech support at an Internet service provider.
 
 We had 8 modems, 8 phone lines, and a 56 Kbps frame-relay leased line.
 
+^ What I want to talk about today is the bits of networks behind the curtains. There's some surprising complexity, built out of some surprising simplicity, and as programmers we often get to keep our hands out of the moving parts that get our bits from here to there. We can learn a lot if we get our hands dirty, and take some lessons away from the design of the Internet that lets us write better, more robust programs.
+
 ----
 
 # A little UNIX history
