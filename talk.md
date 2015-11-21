@@ -1,6 +1,7 @@
-# Networking for Noders
+# Networking for Node Programmers
 
 ## Aria Stewart
+### @aredridel
 
 ----
 
