@@ -39,9 +39,9 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 # Local networks
 
-^ Local network designs have converged into the Ethernet family -- the 80s were full of novel designs, token rings and bit-synchronous connections and serial busses, but things have settled onto Ethernet-like networks for all but the most high performance tasks.
+^ Local network designs have settled on the Ethernet family -- the 80s were full of new designs, token rings and bit-synchronous connections and serial busses, but now we use Ethernet-like networks for all but the most special tasks.
 
-^ Local networks are characterized by a lack of heirarchy: If nodes can talk to each other at all, they can talk to all the other nodes on the network. Nodes generally don't handle data for each other, and equipment is relatively simple. Addresses are hard coded, MAC addresses, since without heirarchy there is no need to categorize hosts by their address. It makes bootstrapping a network much easier if you don't have to key in addresses on every device, user interface or no.
+^ Local networks are defined by a lack of heirarchy: If nodes can talk to each other at all, they can talk to all the other nodes on the network. Nodes generally don't handle data for each other, and equipment is relatively simple. Addresses are hard coded, MAC addresses, since without heirarchy there is no need to categorize hosts by their address. It makes bootstrapping a network much easier if you don't have to key in addresses on every device, user interface or no.
 
 ^ In the OSI model, layer 0 is wires and layer 1 is electrical signals, layer 2 is the local area network protocols, governing which nodes can access any shared medium at the same time, and building this simple, relatively peer to peer network.
 
