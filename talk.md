@@ -8,8 +8,6 @@ My first real job was doing tech support at an Internet service provider.
 
 We had 8 modems, 8 phone lines, and a 56 Kbps frame-relay leased line.
 
-<iframe src='http://127.0.0.1:3333/i/tcpdump/port/80'></iframe>
-
 ----
 
 # A little UNIX history
@@ -96,8 +94,6 @@ Host part `0218:51ff:fec8:2476`
 
 # Routing
 
-<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
-
 ^ Each host looks in its routing table for which interface to put a packet on, drops it into the network, and the next hop picks it up and does the same. It's a very simple process. For the simple case of the host with a router that acts as a gateway, there are two entries: IPs on the local network do an ARP lookup, and send directly, IPs off the local network send to the router.
 
 ^ Things get interesting when we get to routers with multiple connections to the Internet. ISP routers sometimes have a couple configured routes -- whoever's cheapest to send traffic through -- but more often they talk to their neighbor routers over those expensive leased lines (or locally over Ethernet if they are in a peering facility together.)
@@ -105,8 +101,6 @@ Host part `0218:51ff:fec8:2476`
 ----
 
 # A routing example
-
-<iframe src='http://127.0.0.1:3333/i/traceroute/24.75.24.253'></iframe>
 
 ^ So your computer has an address like `1.2.3.4` and is trying to talk to my server at `24.75.24.253`, The two IP addresses have different network parts, so your computer sends the packet to its router. Your router sends it to the connected router at the Internet provider. They probably pass it to a couple others inside the ISP, but then it gets to a place where it could say, send it on toward France, or toward Germany, or toward one of the trans-Atlantic cables. The shortest path to that system is transatlantic, so it passes the packet that way. Each decision is a simple lookup table, then passing the packet on. Routing looks at nothing else.
 
