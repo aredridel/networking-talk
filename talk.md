@@ -70,7 +70,11 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 One IP address maps to exactly one physical interface, a port on a computer or router somewhere. It _should_ be a globally unique identifier.
 
-They have a 'network part' and a 'host part'.
+They are just 4 bytes. They have a 'network part' and a 'host part', the boundary is chosen when allocating a network out of the IP address space.
+
+----
+
+## IP Address examples
 
 A simple case: `/24` — network part `5.6.7` host ID `8`
 
@@ -80,7 +84,9 @@ Complicated case: `/30` — network part `5.6.7` and 6 bits of `8`, host ID just
 
 ^ Could be that a single interface has multiple IPs, but the same IP should not be on two interfaces, short of some Very Clever Tricks for redundancy... Or network address translation.
 
-^ Since a table of which globally unique address is on which port in every router is just too much information, IP networks can be grouped if they share a route and a prefix within a router. It might be that in Europe, it can be aggregated so that any IP starting with `4` can be routed to the US -- a single entry in a table handling 16 million hosts.
+^ Since by definition a network shares an interface, we can now refer to that route with just the network bits, just use the host part as a wildcard.
+
+^ Since a table of which globally unique address is on which port in every router is just too much information, IP networks can be grouped if they share a route and a prefix within a router. It might be that in Europe, it can be aggregated so that any IP starting with `4` can be routed to the United States -- a single entry in a table handling 16 million hosts.
 
 ^ The point here is to get the routing table to fit in memory. It's just now become feasible to just store the twhole table in RAM -- a decade ago, that was prohibitively expensive. And being more efficient now is still faster since we're pumping gigabits per second through even Tier 2 routers.
 
@@ -108,7 +114,62 @@ Host part `0218:51ff:fec8:2476`
 
 # A routing example
 
+```
+:; traceroute -an 24.75.24.253
+traceroute to 24.75.24.253 (24.75.24.253), 64 hops max, 52 byte packets
+ 1  [AS0] 172.16.12.1  2.165 ms  1.443 ms  3.788 ms
+ 2  [AS0] 172.16.6.1  11.284 ms  7.145 ms  1.912 ms
+ 3  [AS55158] 172.16.10.2  2.489 ms  1.467 ms  1.940 ms
+ 4  [AS12956] 193.152.56.217  2.528 ms  4.930 ms  3.260 ms
+ 5  [AS12956] 213.0.255.101  13.511 ms  5.696 ms  2.775 ms
+ 6  [AS3352] 81.46.7.45  13.681 ms  5.128 ms  10.136 ms
+ 7  [AS3352] 80.58.81.50  20.892 ms  5.581 ms  5.560 ms
+ 8  [AS0] 94.142.103.193  4.526 ms  2.966 ms  3.026 ms
+```
+
 ^ So your computer has an address like `1.2.3.4` and is trying to talk to my server at `24.75.24.253`, The two IP addresses have different network parts, so your computer sends the packet to its router. Your router sends it to the connected router at the Internet provider. They probably pass it to a couple others inside the ISP, but then it gets to a place where it could say, send it on toward France, or toward Germany, or toward one of the trans-Atlantic cables. The shortest path to that system is transatlantic, so it passes the packet that way. Each decision is a simple lookup table, then passing the packet on. Routing looks at nothing else.
+
+^ This goes from the private networks inside this room, to the building I'm guessing -- AS0 in this cases shows networks that aren't associated with backbone routing protocols.
+
+^ Next we go to a network by Airnetworks with AS 55158, then to Telefonica Backbone, with AS 12956, then to another part of Telefonica at AS 3352 -- it looks like two companies merged, likely, but are separately maintained networks. Then on to another IP that's not known to BGP, the backbone routing protocol.
+
+---
+
+```
+ 9  [AS0] 94.142.120.158  44.286 ms
+    [AS0] 94.142.117.66  36.946 ms
+    [AS0] 176.52.250.238  29.169 ms
+10  [AS12956] 84.16.12.30  107.763 ms
+    [AS0] 94.142.116.205  107.449 ms  116.521 ms
+11  [AS0] 94.142.127.97  151.301 ms
+    [AS0] 176.52.251.45  137.797 ms
+    [AS0] 94.142.122.206  117.940 ms
+12  [AS0] 94.142.120.89  147.499 ms
+    [AS0] 94.142.120.93  160.729 ms
+```
+
+^ Then our packets run through several routers with, then back to one known by the backbone, then more internal routes. This actually looks like it's all in Telefonica, this is regional routing, getting us out of Spain.
+
+---
+
+```
+    [AS3356] 4.59.36.25  142.818 ms
+13  [AS3356] 4.69.141.142  148.753 ms  146.815 ms
+    [AS0] 94.142.125.73  165.002 ms
+14  [AS3356] 4.69.141.142  152.096 ms
+    [AS3356] 4.59.212.138  152.148 ms  145.159 ms
+15  [AS19548] 24.75.24.134  149.514 ms  150.276 ms
+    [AS3356] 4.59.212.138  153.591 ms
+16  [AS19548] 24.75.24.230  148.211 ms  143.646 ms
+    [AS19548] 24.75.24.134  160.627 ms
+17  [AS19548] 24.75.24.253  144.855 ms
+    [AS19548] 24.75.24.230  151.023 ms
+    [AS19548] 24.75.24.253  148.004 ms
+```
+
+^ And here we jump into AS 3356 -- that one is registered to Level 3 Networks, which is actually based out of my home state of Colorado in the United States, and they run one of the large national backbone networks in the United States. Somewhere in here we made the transatlantic transit, but the latency numbers aren't revealing it, interestingly. The time across the Atlantic is about 50 ms, so we spent more time in switching locally within Spain than we did crossing the Atlantic.
+
+^ Finally we end up at AS 19548, the Adelphia/Time Warner Cable network local to the upstate New York region where my server lives, about 200 miles from New York City.
 
 ----
 
