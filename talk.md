@@ -33,7 +33,7 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 # Leased lines and wide area wired networks
 
-^ Eventually, voice was digitized at 64 kbps, 8 khz sampling, 8 bits per sample. This became the standard digital channel size, 32 channels per E1 line, the channel size of ISDN networks. X.25 came and went, and we started putting Frame Relay and ATM over digital lines. Cheaper, easier to to deploy networks like DSL were created. They can largely be treated as, in the case of Internet traffic, packets you put in one side come out the other in the same order. Expensive lines run at fixed rates and are very reliable; cheaper lines end up adapting to conditions and bandwidth guarantees are harder to make.
+^ Eventually, voice was digitized at 64 kbps, 8 khz sampling, 8 bits per sample. This became the standard digital channel size, 32 channels per E1 line, the channel size of ISDN networks. In the US, the local carrier would charge you by how many 64 kbps channels you had allocated, and then a transit provider would charge you the 95th percentile data rate. Then X.25 came and went, and we started putting Frame Relay and ATM over digital lines. Cheaper, easier to to deploy networks like DSL were created. They can largely be treated as, in the case of Internet traffic, packets you put in one side come out the other in the same order. Expensive lines run at fixed rates and are very reliable; cheaper lines end up adapting to conditions and bandwidth guarantees are harder to make.
 
 ----
 
