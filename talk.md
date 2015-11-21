@@ -283,6 +283,8 @@ Each connection is identified by a source and destination IP address and port:
 
 ^ There was a lot of debate during the creation of web browsers over how many connections and how many connections they could make to each site before it was hostile to others on the network, since each connection increased the relative number of chances there were to get through.
 
+^ Each connection tracks how much space it expects each receiver has left in its buffers.  This is why when we write to sockets in node, we may get different size blocks back on the other end: we put data into our outgoing buffer, a slice that fills the smaller of a packet or the remaining buffer space at the receiver is sent -- it might be the 1400 or so bytes that fill an IP packet over Ethernet, or it might be only a few bytes because that is all we had to send, or it might be only some bytes because the receiver has only acknowledged that it has a few bytes of space to receive.
+
 ----
 
 # Lost packets means slow down
