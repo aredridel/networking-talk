@@ -262,7 +262,9 @@ traceroute to validatestore-1-west.internal.npmjs.com (52.10.227.158), 30 hops m
 
 # TCP
 
-^ The TCP protocol is a large portion of why the Internet has been successful. By moving the complexity out of the network, it has made replacing networks with faster pipes very, very easy.
+## Layer 4 ... Sort of
+
+^ The TCP protocol is a large portion of why the Internet has been successful. By moving the complexity out of the network, it has made replacing networks with faster pipes very, very easy. At this point the Internet doesn't map to the OSI model, where every layer is a protocol on top of the previous. In the Internet, it all got mashed together mostly into TCP.
 
 ----
 
