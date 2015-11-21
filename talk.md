@@ -283,8 +283,6 @@ Each connection is identified by a source and destination IP address and port:
 
 ^ There was a lot of debate during the creation of web browsers over how many connections and how many connections they could make to each site before it was hostile to others on the network, since each connection increased the relative number of chances there were to get through.
 
-^ Now we don't have to worry about that because we can't ramp our speed up fast enough much of the time. Still wortk considering on narrow links though.
-
 ----
 
 # Lost packets means slow down
@@ -314,6 +312,12 @@ There can only be a known number of packets in flight — one packet is easily r
 ## Very high latency.
 
 ^ Not to mention intermittent connectivity.
+
+----
+
+# Very high bandwidth
+
+^ Now we don't have to worry about slow starting TCP very much, because computers have plenty of memory and buffer space is plentiful. But we can't ramp our speed up fast enough much of the time, because the initial values in TCP are very low for modern networks.
 
 -----
 
