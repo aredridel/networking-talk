@@ -361,6 +361,17 @@ There can only be a known number of packets in flight — one packet is easily r
 
 -----
 
-# Final Remarks
+# Final Remarks (and a plug)
+
+more than just the npm registry - npm is a company with products
+
+npm, Inc. was created in 2014 to:
+
+> * run the open source registry as a free service
+> * Build tools & services for the JavaScript developer community
+> * **Private packages** for individuals and **organizations**
+> * Private, on-premises npm registry for enterprises - npm On-Site
 
 ^ We have a lot of opportunity to take advantage of and build out new network designs with node. The runtime fits in some fun places, even ones with relative resource constraints. We can build new protocols on top of the Internet, and we can use existing ones better.
+
+^ Come talk to me about networks, node, and npm
