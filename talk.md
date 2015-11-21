@@ -134,7 +134,7 @@ traceroute to 24.75.24.253 (24.75.24.253), 64 hops max, 52 byte packets
 
 ^ This goes from the private networks inside this room, to the building I'm guessing -- AS0 in this cases shows networks that aren't associated with backbone routing protocols.
 
-^ Next we go to a network by Airnetworks with AS 55158, then to Telefonica Backbone, with AS 12956, then to another part of Telefonica at AS 3352 -- it looks like two companies merged, likely, but are separately maintained networks. Then on to another IP that's not known to BGP, the backbone routing protocol.
+^ Next we go to a network by Airnetworks with AS 55158, then to Telefonica locally, with AS 12956, then to another part of Telefonica Backbone at AS 3352 -- two separately managed networks both by Telefonica. Then on to another IP that's not known to BGP, the backbone routing protocol.
 
 ---
 
