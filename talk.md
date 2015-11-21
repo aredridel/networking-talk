@@ -38,7 +38,7 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 # Local networks
 
-^ Local networks have converged designs -- the 80s were full of novel designs, token rings and bit-synchronous connections and serial busses, but things have settled onto Ethernet-like networks for all but the most high performance tasks.
+^ Local network designs have converged into the Ethernet family -- the 80s were full of novel designs, token rings and bit-synchronous connections and serial busses, but things have settled onto Ethernet-like networks for all but the most high performance tasks.
 
 ^ Local networks are characterized by a lack of heirarchy: If nodes can talk to each other at all, they can talk to all the other nodes on the network. Nodes generally don't handle data for each other, and equipment is relatively simple. Addresses are hard coded, MAC addresses, since without heirarchy there is no need to categorize hosts by their address. It makes bootstrapping a network much easier if you don't have to key in addresses on every device, user interface or no.
 
@@ -56,7 +56,13 @@ RS-422 serial connections to a computer elsewhere in the building.
 
 # Moving Upward
 
-^ On top of Ethernet we put IP and IPv6. This is layer 3 of the OSI model: routing.  Each has a protocol for associating an IP address with a local MAC address if it is run on top of Ethernet, rather than one of those simple 'put packet in, packet comes out the other side' pipes. IP uses ARP: a simple broadcast, if an IP that your computer is trying to contact shares the 'network' portion of the bits with its own IP, it sends out a simple broadcast asking "Does any host on this local network handle this IP?" If it gets a reply, it caches that and sends the IP packet addressed to the host that answered. Most of the time, though, the IP is not similar, so a host will look up the MAC address of the router or gateway it is configured with (often with DHCP, also broadcast enough to get moving), and send the IP packet to that MAC address. The router can pass it on or discard it at its will.
+## Layer 3
+
+^ On top of Ethernet we put IP and IPv6. This is layer 3 of the OSI model: routing.  Each has a protocol for associating an IP address with a local MAC address if it is run on top of Ethernet, rather than one of those simple 'put packet in, packet comes out the other side' pipes. IP uses ARP: a simple broadcast.
+
+^ If an IP that your computer is trying to contact shares the 'network' portion of the bits with its own IP, it sends out a simple broadcast asking "Does any host on this local network handle this IP?" If it gets a reply, it caches that and sends the IP packet addressed to the host that answered.
+
+^ Most of the time, though, the IP is not similar, so a host will look up the MAC address of the router or gateway it is configured with (often with DHCP, also broadcast enough to get moving), and send the IP packet to that MAC address. The router can pass it on or discard it at its will.
 
 ----
 
